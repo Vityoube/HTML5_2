@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Video Player</title>
+     <style type="text/css">
+     #playlist {
+         display:table;
+        }
+        #playlist li{
+         cursor:pointer;
+         padding:8px;
+        }
+
+        #playlist li:hover{
+         color:blue;
+        }
+        #videoPlayer {
+         float:left;
+         width:640px;
+         height:480px;
+         margin:10px;
+         border:1px solid silver;
+        }
+     </style>
+  </head>
+  <body onload="addListeners();">
+
+    <video id="videoPlayer" width="480" height="320" controls>
+    </video>
+    <div>
+    <ul id="playlist">
+      <li id="firstVideo" movieurl="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4">Video1</li>
+      <li id="secondVideo" movieurl="https://vrbx084.cda.pl/CuuVlucuDFmf4ShSYNMWeA/1507705893/lqcb90c4575010664612a96f3edb1da43bf63fe63de9f26c26f98d8d5dbd59e0f1.mp4">
+        Video 2</li>
+      <li id="thirdVideo" movieurl="https://vrbx049.cda.pl/IJkZl3BSelklLOjanOK2qg/1507705733/lq14043958162075.mp4">Video 3</li>
+      <li id="fourthVideo" movieurl="https://vrbx224.cda.pl/KaBLT1fLEi4ecy2L34A4oA/1507706743/8e10f21ae05ed9026a5719437be873a0580aea0f2112adbe8b151896f6d02501.mp4">
+        Video4
+      </li>
+      <li id="fifthVideo" movieurl="https://vivostream.fiu.edu/cc924151805a4937b3c8d882fbf41417/720.mp4" >Video5</li>
+    </ul>
+    </div>
+      <script type="text/javascript">
+
+
+      // var li=ul.children;
+
+      function addListeners() {
+        var firstVideo=document.getElementById("firstVideo");
+        var secondVideo=document.getElementById("secondVideo");
+        var thirdVideo=document.getElementById("thirdVideo");
+        var fourthVideo=document.getElementById("fourthVideo");
+        var fifthVideo=document.getElementById("fifthVideo");
+
+        var videoPlayer=document.getElementById('videoPlayer');
+
+        firstVideo.addEventListener("click",function(){
+              videoPlayer.src=this.getAttribute("movieurl");
+              videoPlayer.appendChild(source);
+              videoPlayer.autoplay="autoplay";
+        });
+        secondVideo.addEventListener("click",function(){
+              videoPlayer.src=this.getAttribute("movieurl");
+              videoPlayer.appendChild(source);
+              videoPlayer.autoplay="autoplay";
+        });
+        thirdVideo.addEventListener("click",function(){
+              videoPlayer.src=this.getAttribute("movieurl");
+              videoPlayer.appendChild(source);
+              videoPlayer.autoplay="autoplay";
+        });
+        fourthVideo.addEventListener("click",function(){
+              videoPlayer.src=this.getAttribute("movieurl");
+              videoPlayer.appendChild(source);
+              videoPlayer.autoplay="autoplay";
+        });
+        fifthVideo.addEventListener("click",function(){
+              videoPlayer.src=this.getAttribute("movieurl");
+              videoPlayer.appendChild(source);
+              videoPlayer.autoplay="autoplay";
+        });
+        // alert(ul.chidren.length);
+        /*  $("#playlist li").on("click", function() {
+              $("#videoPlayer").attr({
+                  "src": $(this).attr("movieurl"),
+                  "poster": "",
+                  "autoplay": "autoplay"
+              })
+          })
+          $("#videoPlayer").attr({
+              "src": $("#playlist li").eq(0).attr("movieurl"),
+              "poster": $("#playlist li").eq(0).attr("moviesposter")
+          })
+      })​ */
+    }
+
+      </script>
+
+
+  </body>
+</html>
