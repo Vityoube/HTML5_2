@@ -32,10 +32,10 @@
     <div>
     <ul id="playlist">
       <li id="firstVideo" movieurl="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4">Video1</li>
-      <li id="secondVideo" movieurl="https://vrbx084.cda.pl/CuuVlucuDFmf4ShSYNMWeA/1507705893/lqcb90c4575010664612a96f3edb1da43bf63fe63de9f26c26f98d8d5dbd59e0f1.mp4">
+      <li id="secondVideo" movieurl="https://vstatic3.cda.pl/v/3jkymJA_W0M.mp4">
         Video 2</li>
-      <li id="thirdVideo" movieurl="https://vrbx049.cda.pl/IJkZl3BSelklLOjanOK2qg/1507705733/lq14043958162075.mp4">Video 3</li>
-      <li id="fourthVideo" movieurl="https://vrbx224.cda.pl/KaBLT1fLEi4ecy2L34A4oA/1507706743/8e10f21ae05ed9026a5719437be873a0580aea0f2112adbe8b151896f6d02501.mp4">
+      <li id="thirdVideo" movieurl="https://vrbx058.cda.pl/O_tM_1ifB-AlzyC52JckUg/1507768348/lq6ee2adccfb3119cac09c288473cf95bcf00e550d05ba35fcd3a25b80e1348837.mp4">Video 3</li>
+      <li id="fourthVideo" movieurl="https://vrbx225.cda.pl/jLcmsrOCxHxDpAO-3S95Jw/1507768439/lq42399ace8d70fa502ed80fd34d698b721a39b8c4cb682adaf0dbfbcad52f57a0.mp4">
         Video4
       </li>
       <li id="fifthVideo" movieurl="https://vivostream.fiu.edu/cc924151805a4937b3c8d882fbf41417/720.mp4" >Video5</li>
@@ -57,42 +57,24 @@
 
         firstVideo.addEventListener("click",function(){
               videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.appendChild(source);
               videoPlayer.autoplay="autoplay";
         });
         secondVideo.addEventListener("click",function(){
               videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.appendChild(source);
               videoPlayer.autoplay="autoplay";
         });
         thirdVideo.addEventListener("click",function(){
               videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.appendChild(source);
               videoPlayer.autoplay="autoplay";
         });
         fourthVideo.addEventListener("click",function(){
               videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.appendChild(source);
               videoPlayer.autoplay="autoplay";
         });
         fifthVideo.addEventListener("click",function(){
               videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.appendChild(source);
               videoPlayer.autoplay="autoplay";
         });
-        // alert(ul.chidren.length);
-        /*  $("#playlist li").on("click", function() {
-              $("#videoPlayer").attr({
-                  "src": $(this).attr("movieurl"),
-                  "poster": "",
-                  "autoplay": "autoplay"
-              })
-          })
-          $("#videoPlayer").attr({
-              "src": $("#playlist li").eq(0).attr("movieurl"),
-              "poster": $("#playlist li").eq(0).attr("moviesposter")
-          })
-      })​ */
     }
 
       </script>
