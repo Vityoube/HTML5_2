@@ -34,10 +34,19 @@
     </video>
     <div>
     <ul id="playlist">
-      <li id="firstVideo" movieurl="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4">Video1</li><li id="secondVideo" movieurl="https://secure.sitebees.com/file/mediakitv/1122024/MP4_360P/82/VIDEO+z+logo.mp4">Video2</li><li id="thirdVideo" movieurl="https://static.videezy.com/system/resources/previews/000/005/097/original/Slow_Fall_4K_Motion_Background_Loop.mp4">Video3</li><li id="fourthVideo" movieurl="https://edge.flowplayer.org/functional.mp4">Video4</li><li id="fifthVideo" movieurl="https://vivostream.fiu.edu/cc924151805a4937b3c8d882fbf41417/720.mp4" >Video5</li>
+      <li id="firstVideo" movieurl="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"></li><li id="secondVideo" movieurl="https://secure.sitebees.com/file/mediakitv/1122024/MP4_360P/82/VIDEO+z+logo.mp4"></li><li id="thirdVideo" movieurl="https://static.videezy.com/system/resources/previews/000/005/097/original/Slow_Fall_4K_Motion_Background_Loop.mp4"></li><li id="fourthVideo" movieurl="https://edge.flowplayer.org/functional.mp4"></li><li id="fifthVideo" movieurl="https://vivostream.fiu.edu/cc924151805a4937b3c8d882fbf41417/720.mp4" ></li>
     </ul>
     <button type="button" style="float: left;" onclick="playPrevVideo();"> Prev Video</button>
     <button type="button" style="float: left;"onclick="playNextVideo();"> Next Video</button>
+	<input id="vol-control" type="range" min="0" max="100" step="1"></input>
+	<input id="progress-control" type="range" min="0" max="100" step="1"></input>
+  <progress id="progress"></progress> 
+  <form action="javascript:0"> 
+    <input id="url" type="text" pattern="" required ></input>
+    <button type="button" onclick="addVideoToList();">Upload</button>
+  </form>
+
+	
     
     </div>
 
@@ -49,17 +58,67 @@
       function addListeners() {
         var videoPlayer=document.querySelector('#videoPlayer');
         var ul=document.querySelector('#playlist');
+        var volumeControl = document.querySelector('#vol-control');
+        var progressControl=document.querySelector("#progress-control");
+        var progress=document.querySelector('#progress');
         var links=ul.children;
         for (var i=0;i<links.length;i++){
-          links[i].addEventListener("click",function(){
-              videoPlayer.src=this.getAttribute("movieurl");
+          var videoButton=document.createElement("button");
+          videoButton.textContent="Video"+(i+1);
+          videoButton.addEventListener("click",function(){
+            videoPlayer.src=this.parentElement.getAttribute("movieurl");
               videoPlayer.autoplay="autoplay";
+              videoPlayer.currentTime=this.parentElement.getAttribute("currrentTime");
               for (var i=0;i<links.length;i++){
                 links[i].classList.remove("selected");
+                links[i].removeEventListener("timeupdate");
               }
-              this.classList.add("selected");
+              if (parseInt(this.parentElement.getAttribute("currentTime"))!=0){
+                this.parentElement.addEventListener("timeupdate",function(){
+                  this.setAttribute("currentTime",videoPlayer.currentTime);
+                });
+              }
+              
+              this.parentElement.classList.add("selected");
+          });          
+              
+        var removeButton=document.createElement("button");
+        removeButton.textContent="X";
+        removeButton.addEventListener("click",function(){
+          if (!videoPlayer.paused && links.length>1)
+            playNextVideo();
+          else if (links.length<=1){
+            videoPlayer.src="";
+          }
+            
+          this.parentElement.parentElement.removeChild(this.parentElement);
+          
         });
+        
+        links[i].appendChild(videoButton);
+        links[i].appendChild(removeButton);
         }
+		var setVolume = function() { videoPlayer.volume = this.value / 100; };
+		
+		volumeControl.addEventListener('change', setVolume);
+		volumeControl.addEventListener('input', setVolume);
+		progressControl.addEventListener('change',function(){
+			videoPlayer.currentTime=videoPlayer.duration*(this.value/100);
+			progress.max=videoPlayer.duration;
+			progress.value=videoPlayer.duration*(this.value/100);
+		});
+		videoPlayer.addEventListener('timeupdate',function(){
+			volumeControl.value=this.volume*100;
+			progressControl.value=(this.currentTime*100)/this.duration;
+			progress.max=this.duration;
+			progress.value=(this.currentTime);
+
+      if (this.ended){
+        playRandomVideo();
+      }
+		} );
+    
+		
     }
 
     function playNextVideo(){
@@ -68,7 +127,7 @@
       if (currentVideo==null)
         nextVideo=document.querySelector('#playlist').children[0];
       else
-        nextVideo=currentVideo.nextSibling;
+        nextVideo=currentVideo.nextElementSibling;
       if (nextVideo==null)
         nextVideo=document.querySelector('#playlist').children[0];
       // alert(nextVideo);
@@ -85,12 +144,13 @@
     function playPrevVideo(){
       var currentVideo=document.querySelector(".selected");
       var prevVideo;
+      var ul=document.querySelector('#playlist');
       if (currentVideo==null)
-        prevVideo=document.querySelector('#playlist').children[4];
+        prevVideo=ul.children[ul.childElementCount-1];
       else
         prevVideo=currentVideo.previousElementSibling;
       if (prevVideo==null)
-      prevVideo=document.querySelector('#playlist').children[4];
+        prevVideo=ul.children[ul.childElementCount-1];
       var videoPlayer=document.querySelector('#videoPlayer');
       var links=document.querySelector('#playlist').children;
       for (var i=0;i<links.length;i++){
@@ -99,24 +159,67 @@
       prevVideo.classList.add('selected');
       videoPlayer.src=prevVideo.getAttribute('movieurl');
       videoPlayer.autoplay="autoplay";
-        secondVideo.addEventListener("click",function(){
-              videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.autoplay="autoplay";
-        });
-        thirdVideo.addEventListener("click",function(){
-              videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.autoplay="autoplay";
-        });
-        fourthVideo.addEventListener("click",function(){
-              videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.autoplay="autoplay";
-        });
-        fifthVideo.addEventListener("click",function(){
-              videoPlayer.src=this.getAttribute("movieurl");
-              videoPlayer.autoplay="autoplay";
-        });
     }
 
+    function addVideoToList(){
+      var videoUrl=document.querySelector("#url");
+      var httpPattern=new RegExp("^https?://.+$");
+      var videoPlayer=document.querySelector('#videoPlayer');
+      if (httpPattern.test(videoUrl.value)){
+        var playlist=document.querySelector('#playlist');
+      var textLength=playlist.lastElementChild.textContent.length;
+      var lastVideoNumber=playlist.lastElementChild.children[0].textContent.substring(textLength-2,textLength-1);
+      //alert(lastVideoNumber);
+      var newVideo=document.createElement('li');
+      var videoButton=document.createElement("button");
+      alert(videoUrl.value);
+      newVideo.setAttribute("movieurl",videoUrl.value);
+      videoButton.textContent="Video"+parseInt(parseInt(lastVideoNumber)+1);
+      videoButton.addEventListener("click",function(){
+        videoPlayer.src=this.parentElement.getAttribute("movieurl");
+        videoPlayer.autoplay="autoplay";
+        for (var i=0;i<links.length;i++){
+          links[i].classList.remove("selected");
+          links[i].removeEventListener("timeupdate");
+        }
+        this.parentElement.classList.add("selected");
+        this.parentElement.addEventListener("timeupdate",function(){
+            this.setAttribute("currentTime",videoPlayer.currentTime);
+        });
+      });
+      var removeButton=document.createElement("button");
+        removeButton.textContent="X";
+        removeButton.addEventListener("click",function(){
+          if (!videoPlayer.paused && links.length>1)
+            playNextVideo();
+          else if (links.length<=1){
+            videoPlayer.src="";
+          }
+          this.parentElement.parentElement.removeChild(this.parentElement);          
+        });
+        newVideo.appendChild(videoButton);
+        newVideo.appendChild(removeButton);
+      playlist.appendChild(newVideo);
+      }
+      
+
+    }
+
+    function playRandomVideo(){
+      var videos=document.querySelector("ul").children;
+      var randomVideo=videos[parseInt(Math.random()*videos.length)];
+      while(randomVideo.classList.contains("selected")){
+        randomVideo=videos[parseInt(Math.random()*videos.length)];
+      }
+      for (var i=0;i<videos.length;i++){
+        videos[i].classList.remove("selected");
+      }
+      randomVideo.classList.add("selected");
+      var videoPlayer=document.querySelector('#videoPlayer');
+      videoPlayer.src=randomVideo.getAttribute("movieurl");
+      videoPlayer.autoplay="autoplay";
+
+    }
       </script>
 
 
