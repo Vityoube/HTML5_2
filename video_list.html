@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <!DOCTYPE html>
 <html>
@@ -225,3 +226,169 @@
 
   </body>
 </html>
+=======
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Video Player</title>
+     <style type="text/css">
+     #playlist {
+         display:table;
+        }
+        #playlist li{
+         cursor:pointer;
+         padding:8px;
+        }
+
+        #playlist li:hover{
+         color:blue;
+        }
+        #videoPlayer {
+         float:left;
+         width:640px;
+         height:480px;
+         margin:10px;
+         border:1px solid silver;
+        }
+        .selected {
+          background-color: red;
+        }
+     </style>
+  </head>
+  <body onload="addListeners();">
+
+    <video id="videoPlayer" width="480" height="320" controls>
+    </video>
+    <div>
+    <ul id="playlist">
+      <li id="firstVideo" movieurl="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4">Video1</li><li id="secondVideo" movieurl="https://secure.sitebees.com/file/mediakitv/1122024/MP4_360P/82/VIDEO+z+logo.mp4">Video2</li><li id="thirdVideo" movieurl="https://static.videezy.com/system/resources/previews/000/005/097/original/Slow_Fall_4K_Motion_Background_Loop.mp4">Video3</li><li id="fourthVideo" movieurl="https://edge.flowplayer.org/functional.mp4">Video4</li><li id="fifthVideo" movieurl="https://vivostream.fiu.edu/cc924151805a4937b3c8d882fbf41417/720.mp4" >Video5</li>
+    </ul>
+    <button type="button" style="float: left;" onclick="playPrevVideo();"> Prev Video</button>
+    <button type="button" style="float: left;"onclick="playNextVideo();"> Next Video</button>
+	<input id="vol-control" type="range" min="0" max="100" step="1"></input>
+	<input id="progress-control" type="range" min="0" max="100" step="1"></input>
+  <progress id="progress"></progress> 
+  <form action="javascript:0"> 
+    <input id="url" type="text" pattern="" required ></input>
+    <button type="button" onclick="addVideoToList();">Upload</button>
+  </form>
+
+	
+    
+    </div>
+
+      <script type="text/javascript">
+
+
+      // var li=ul.children;
+
+      function addListeners() {
+        var videoPlayer=document.querySelector('#videoPlayer');
+        var ul=document.querySelector('#playlist');
+		var volumeControl = document.querySelector('#vol-control');
+		var progressControl=document.querySelector("#progress-control");
+		var progress=document.querySelector('#progress');
+        var links=ul.children;
+        for (var i=0;i<links.length;i++){
+          links[i].addEventListener("click",function(){
+              videoPlayer.src=this.getAttribute("movieurl");
+              videoPlayer.autoplay="autoplay";
+              for (var i=0;i<links.length;i++){
+                links[i].classList.remove("selected");
+              }
+              this.classList.add("selected");
+        });
+        }
+		var setVolume = function() { videoPlayer.volume = this.value / 100; };
+		
+		volumeControl.addEventListener('change', setVolume);
+		volumeControl.addEventListener('input', setVolume);
+		progressControl.addEventListener('change',function(){
+			videoPlayer.currentTime=videoPlayer.duration*(this.value/100);
+			progress.max=videoPlayer.duration;
+			progress.value=videoPlayer.duration*(this.value/100);
+		});
+		videoPlayer.addEventListener('timeupdate',function(){
+			volumeControl.value=this.volume*100;
+			progressControl.value=(this.currentTime*100)/this.duration;
+			progress.max=this.duration;
+			progress.value=(this.currentTime);
+		} );
+		
+    }
+
+    function playNextVideo(){
+      var currentVideo=document.querySelector(".selected");
+      var nextVideo;
+      if (currentVideo==null)
+        nextVideo=document.querySelector('#playlist').children[0];
+      else
+        nextVideo=currentVideo.nextElementSibling;
+      if (nextVideo==null)
+        nextVideo=document.querySelector('#playlist').children[0];
+      // alert(nextVideo);
+      var videoPlayer=document.querySelector('#videoPlayer');
+      var links=document.querySelector('#playlist').children;
+      for (var i=0;i<links.length;i++){
+        links[i].classList.remove("selected");
+      }
+      nextVideo.classList.add('selected');
+      videoPlayer.src=nextVideo.getAttribute('movieurl');
+      videoPlayer.autoplay="autoplay";
+    }
+
+    function playPrevVideo(){
+      var currentVideo=document.querySelector(".selected");
+      var prevVideo;
+      var ul=document.querySelector('#playlist');
+      if (currentVideo==null)
+        prevVideo=ul.children[ul.childElementCount-1];
+      else
+        prevVideo=currentVideo.previousElementSibling;
+      if (prevVideo==null)
+        prevVideo=ul.children[ul.childElementCount-1];
+      var videoPlayer=document.querySelector('#videoPlayer');
+      var links=document.querySelector('#playlist').children;
+      for (var i=0;i<links.length;i++){
+        links[i].classList.remove("selected");
+      }
+      prevVideo.classList.add('selected');
+      videoPlayer.src=prevVideo.getAttribute('movieurl');
+      videoPlayer.autoplay="autoplay";
+    }
+
+    function addVideoToList(){
+      var videoUrl=document.querySelector("#url");
+      var httpPattern=new RegExp("^https?://.+$")
+      if (httpPattern.test(videoUrl.value)){
+        var playlist=document.querySelector('#playlist');
+      var textLength=playlist.lastElementChild.textContent.length;
+      var lastVideoNumber=playlist.lastElementChild.textContent.substring(textLength-1);
+      //alert(lastVideoNumber);
+      var newVideo=document.createElement('li');
+      alert(videoUrl.value);
+      newVideo.setAttribute("movieurl",videoUrl.value);
+      newVideo.textContent="Video"+parseInt(parseInt(lastVideoNumber)+1);
+      newVideo.addEventListener("click",function(){
+        var ul=document.querySelector('#playlist');
+        videoPlayer.src=this.getAttribute("movieurl");
+        videoPlayer.autoplay="autoplay";
+        var links=ul.children;
+        for (var i=0;i<links.length;i++){
+          links[i].classList.remove("selected");
+        }
+        this.classList.add("selected");
+      });
+      playlist.appendChild(newVideo);
+      }
+      
+
+    }
+      </script>
+
+
+  </body>
+</html>
+>>>>>>> cd6730c91b582e26af7909c55bd07d4f856d777f
